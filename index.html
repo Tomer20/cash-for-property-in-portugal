@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cash for Property in Portugal</title>
+  <script>
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @custom-variant dark (&:where(.dark, .dark *));
+    @theme {
+      --color-brand: #1e40af;
+      --color-brand-light: #3b82f6;
+      --color-accent: #059669;
+      --color-accent-light: #10b981;
+      --color-warm: #d97706;
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 8px;
+      border-radius: 4px;
+      background: #dbeafe;
+      outline: none;
+    }
+    .dark input[type="range"] { background: #1e3a5f; }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--color-brand);
+      cursor: pointer; border: 2px solid white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--color-brand);
+      cursor: pointer; border: 2px solid white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    .result-row { transition: background-color 0.15s; }
+    .result-row:hover { background-color: #f0f9ff; }
+    .dark .result-row:hover { background-color: #1e293b; }
+    .tooltip-wrap { position: relative; }
+    .tooltip-wrap .tooltip-text {
+      visibility: hidden; opacity: 0;
+      position: absolute; z-index: 50;
+      bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+      width: 260px; padding: 10px 12px; border-radius: 8px;
+      background: #1e293b; color: #f1f5f9;
+      font-size: 12px; line-height: 1.5;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: opacity 0.15s, visibility 0.15s;
+      pointer-events: none;
+    }
+    .dark .tooltip-wrap .tooltip-text { background: #0f172a; border: 1px solid #334155; }
+    .tooltip-wrap .tooltip-text::after {
+      content: ''; position: absolute; top: 100%; left: 50%;
+      transform: translateX(-50%); border-width: 6px; border-style: solid;
+      border-color: #1e293b transparent transparent transparent;
+    }
+    .dark .tooltip-wrap .tooltip-text::after { border-color: #0f172a transparent transparent transparent; }
+    .tooltip-wrap:hover .tooltip-text,
+    .tooltip-wrap:focus-within .tooltip-text { visibility: visible; opacity: 1; }
+    @media (max-width: 640px) {
+      .tooltip-wrap .tooltip-text { left: auto; right: -8px; transform: none; width: 220px; }
+      .tooltip-wrap .tooltip-text::after { left: auto; right: 16px; transform: none; }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors">
+
+  <!-- Header -->
+  <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+    <div class="max-w-4xl mx-auto px-4 py-5 flex justify-between items-start">
+      <div>
+        <h1 class="text-2xl font-bold text-brand dark:text-blue-400 flex items-center gap-2">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/></svg>
+          <span data-i18n="title">Cash for Property in Portugal</span>
+        </h1>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1" data-i18n="subtitle">How much cash do you actually need to bring to the table?</p>
+      </div>
+      <div class="flex items-center gap-2 shrink-0 mt-1">
+        <button id="langToggle" onclick="toggleLang()" class="px-2.5 py-1.5 text-xs font-bold rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors" title="Switch language">PT</button>
+        <button onclick="toggleDark()" class="p-1.5 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors" title="Toggle dark mode">
+          <svg class="w-4 h-4 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/></svg>
+          <svg class="w-4 h-4 block dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-8">
+    <div class="grid md:grid-cols-5 gap-8">
+
+      <!-- Inputs -->
+      <section class="md:col-span-3 space-y-6">
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 space-y-5">
+          <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100" data-i18n="propertyDetails">Property Details</h2>
+
+          <div>
+            <label for="price" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" data-i18n="propertyPrice">Property Price</label>
+            <div class="relative">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">€</span>
+              <input id="price" type="text" inputmode="numeric" data-i18n-ph="pricePh" placeholder="300.000"
+                class="w-full pl-8 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-light focus:border-brand-light outline-none text-lg">
+            </div>
+          </div>
+
+          <div>
+            <label for="evaluation" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <span data-i18n="bankEvaluation">Bank Evaluation</span>
+              <span class="text-gray-400 dark:text-gray-500 font-normal" data-i18n="bankEvalHint">(leave empty = same as price)</span>
+            </label>
+            <div class="relative">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">€</span>
+              <input id="evaluation" type="text" inputmode="numeric" data-i18n-ph="evalPh" placeholder="Same as price"
+                class="w-full pl-8 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-light focus:border-brand-light outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <span data-i18n="financing">Financing</span>: <span id="financingLabel" class="text-brand dark:text-blue-400 font-bold">80%</span>
+            </label>
+            <input id="financing" type="range" min="0" max="90" value="80" step="1" class="w-full">
+            <div class="flex justify-between text-xs text-gray-400 dark:text-gray-500 mt-1">
+              <span>0%</span>
+              <span id="financingMaxLabel">90%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 space-y-4">
+          <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100" data-i18n="options">Options</h2>
+
+          <!-- Region -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" data-i18n="regionLabel">Region</label>
+            <div class="flex rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600">
+              <button id="btnMainland" onclick="setRegion('mainland')" data-i18n="mainland"
+                class="flex-1 py-2.5 text-sm font-medium transition-colors bg-brand text-white">Mainland</button>
+              <button id="btnMadeira" onclick="setRegion('madeira')" data-i18n="madeira"
+                class="flex-1 py-2.5 text-sm font-medium transition-colors bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600">Madeira</button>
+              <button id="btnAzores" onclick="setRegion('azores')" data-i18n="azores"
+                class="flex-1 py-2.5 text-sm font-medium transition-colors bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600">Azores</button>
+            </div>
+            <p id="regionNote" class="text-xs text-amber-600 dark:text-amber-400 mt-1.5 hidden" data-i18n="regionNote">Autonomous regions may have reduced IMT rates. Values shown use mainland rates as a conservative estimate.</p>
+          </div>
+
+          <!-- Property type -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" data-i18n="propertyType">Property Type</label>
+            <div class="flex rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600">
+              <button id="btnUrban" onclick="setPropertyType('urban')" data-i18n="urban"
+                class="flex-1 py-2.5 text-sm font-medium transition-colors bg-brand text-white">Urban</button>
+              <button id="btnRural" onclick="setPropertyType('rural')" data-i18n="rural"
+                class="flex-1 py-2.5 text-sm font-medium transition-colors bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600">Rural</button>
+              <button id="btnOther" onclick="setPropertyType('other')" data-i18n="otherUrban"
+                class="flex-1 py-2.5 text-sm font-medium transition-colors bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600">Building plot</button>
+            </div>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1.5" data-i18n="propertyTypeHint">Apartment or house = Urban. Rural land = 5% flat IMT. Building plots = 6.5% flat.</p>
+          </div>
+
+          <!-- Residency -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" data-i18n="residencyStatus">Residency Status</label>
+            <div class="flex rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600">
+              <button id="btnResident" onclick="setResidency('resident')" data-i18n="ptResident"
+                class="flex-1 py-2.5 text-sm font-medium transition-colors bg-brand text-white">PT Resident</button>
+              <button id="btnNonResident" onclick="setResidency('non-resident')" data-i18n="nonResident"
+                class="flex-1 py-2.5 text-sm font-medium transition-colors bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600">Non-Resident</button>
+            </div>
+            <p id="residencyNote" class="text-xs text-gray-400 dark:text-gray-500 mt-1.5 hidden" data-i18n="residencyNote">Non-residents typically get max 60–70% bank financing</p>
+          </div>
+
+          <!-- Purpose -->
+          <div id="purposeWrapper">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" data-i18n="propertyPurpose">Property Purpose</label>
+            <div class="flex rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600">
+              <button id="btnPrimary" onclick="setPurpose('primary')" data-i18n="primaryResidence"
+                class="flex-1 py-2.5 text-sm font-medium transition-colors bg-brand text-white">Primary Residence</button>
+              <button id="btnSecondary" onclick="setPurpose('secondary')" data-i18n="secondaryInvestment"
+                class="flex-1 py-2.5 text-sm font-medium transition-colors bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600">Secondary / Investment</button>
+            </div>
+          </div>
+
+          <!-- Under 35 -->
+          <label class="flex items-center gap-3 cursor-pointer" id="under35Wrapper">
+            <input id="under35" type="checkbox" class="w-5 h-5 rounded text-brand focus:ring-brand-light">
+            <div>
+              <span class="text-sm font-medium text-gray-700 dark:text-gray-300" data-i18n="under35Label">First-time buyer, age ≤ 35</span>
+              <p class="text-xs text-gray-400 dark:text-gray-500" data-i18n="under35Hint">Full IMT exemption up to ~€330k, partial above</p>
+            </div>
+          </label>
+
+          <!-- Translator -->
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input id="needsTranslator" type="checkbox" class="w-5 h-5 rounded text-brand focus:ring-brand-light">
+            <div>
+              <span class="text-sm font-medium text-gray-700 dark:text-gray-300" data-i18n="translatorLabel">Needs translator</span>
+              <p class="text-xs text-gray-400 dark:text-gray-500" data-i18n="translatorHint">Required by law if you don't speak Portuguese</p>
+            </div>
+          </label>
+        </div>
+
+        <!-- Fees -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 space-y-4">
+          <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100" data-i18n="fees">Fees</h2>
+
+          <div>
+            <label for="lawyer" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" data-i18n="lawyerFee">Lawyer Fee</label>
+            <div class="relative">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">€</span>
+              <input id="lawyer" type="text" inputmode="numeric" value="1.500"
+                class="w-full pl-8 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-light focus:border-brand-light outline-none">
+            </div>
+          </div>
+
+          <div id="translatorRow" class="hidden">
+            <label for="translator" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" data-i18n="translatorFee">Translator Fee</label>
+            <div class="relative">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">€</span>
+              <input id="translator" type="text" inputmode="numeric" value="750"
+                class="w-full pl-8 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-light focus:border-brand-light outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label for="notary" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <span data-i18n="notaryFee">Notary Fee</span>
+              <span class="text-gray-400 dark:text-gray-500 font-normal" data-i18n="notaryHint">(deed signing + registration)</span>
+            </label>
+            <div class="relative">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">€</span>
+              <input id="notary" type="text" inputmode="numeric" value="600"
+                class="w-full pl-8 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-light focus:border-brand-light outline-none">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Results -->
+      <section class="md:col-span-2">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 md:sticky md:top-8">
+          <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4" data-i18n="costBreakdown">Cost Breakdown</h2>
+
+          <div class="space-y-0 divide-y divide-gray-100 dark:divide-gray-700 text-sm">
+            <div class="result-row flex justify-between py-2.5 rounded px-1">
+              <span class="text-gray-600 dark:text-gray-400" data-i18n="mortgageAmount">Mortgage amount</span>
+              <span id="outMortgage" class="font-medium text-gray-800 dark:text-gray-100">—</span>
+            </div>
+            <div class="result-row flex justify-between py-2.5 rounded px-1">
+              <span class="text-gray-600 dark:text-gray-400" data-i18n="equity">Equity (your money for property)</span>
+              <span id="outEquity" class="font-medium text-gray-800 dark:text-gray-100">—</span>
+            </div>
+
+            <div class="pt-3 pb-1 px-1">
+              <span class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500" data-i18n="taxesHeader">Taxes</span>
+            </div>
+            <div class="result-row flex justify-between py-2.5 rounded px-1">
+              <span class="text-gray-600 dark:text-gray-400 flex items-center gap-1">
+                <span id="imtLabel">IMT</span>
+                <span class="tooltip-wrap" tabindex="0">
+                  <svg class="w-3.5 h-3.5 text-gray-400 cursor-help" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                  <span class="tooltip-text" data-i18n-html="tooltipIMT"><strong>Imposto Municipal sobre Transmissões (IMT)</strong><br>Progressive property transfer tax paid once at purchase. Rates vary by property purpose. First-time buyers ≤35 may be exempt up to ~€330k.</span>
+                </span>
+              </span>
+              <span id="outIMT" class="font-medium text-gray-800 dark:text-gray-100">—</span>
+            </div>
+            <div class="result-row flex justify-between py-2.5 rounded px-1">
+              <span class="text-gray-600 dark:text-gray-400 flex items-center gap-1">
+                <span data-i18n="seloProperty">Selo — property</span>
+                <span class="tooltip-wrap" tabindex="0">
+                  <svg class="w-3.5 h-3.5 text-gray-400 cursor-help" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                  <span class="tooltip-text" data-i18n-html="tooltipSeloProperty"><strong>Imposto do Selo — Property</strong><br>Stamp duty of 0.8% on the purchase price. Paid once at deed signing. Young buyers (≤35) get a discount on urban primary residence.</span>
+                </span>
+                <span class="text-xs text-gray-400 dark:text-gray-500">(0.8%)</span>
+              </span>
+              <span id="outStampProperty" class="font-medium text-gray-800 dark:text-gray-100">—</span>
+            </div>
+            <div class="result-row flex justify-between py-2.5 rounded px-1">
+              <span class="text-gray-600 dark:text-gray-400 flex items-center gap-1">
+                <span data-i18n="seloMortgage">Selo — mortgage</span>
+                <span class="tooltip-wrap" tabindex="0">
+                  <svg class="w-3.5 h-3.5 text-gray-400 cursor-help" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                  <span class="tooltip-text" data-i18n-html="tooltipSeloMortgage"><strong>Imposto do Selo — Mortgage</strong><br>Stamp duty of 0.6% on the mortgage amount. Only applies with bank financing.</span>
+                </span>
+                <span class="text-xs text-gray-400 dark:text-gray-500">(0.6%)</span>
+              </span>
+              <span id="outStampMortgage" class="font-medium text-gray-800 dark:text-gray-100">—</span>
+            </div>
+
+            <div class="pt-3 pb-1 px-1">
+              <span class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500" data-i18n="feesHeader">Fees</span>
+            </div>
+            <div class="result-row flex justify-between py-2.5 rounded px-1">
+              <span class="text-gray-600 dark:text-gray-400" data-i18n="lawyerLabel">Lawyer</span>
+              <span id="outLawyer" class="font-medium text-gray-800 dark:text-gray-100">—</span>
+            </div>
+            <div class="result-row flex justify-between py-2.5 rounded px-1 hidden" id="outTranslatorRow">
+              <span class="text-gray-600 dark:text-gray-400" data-i18n="translatorLabelShort">Translator</span>
+              <span id="outTranslator" class="font-medium text-gray-800 dark:text-gray-100">—</span>
+            </div>
+            <div class="result-row flex justify-between py-2.5 rounded px-1">
+              <span class="text-gray-600 dark:text-gray-400 flex items-center gap-1">
+                <span data-i18n="notaryLabel">Notary</span>
+                <span class="tooltip-wrap" tabindex="0">
+                  <svg class="w-3.5 h-3.5 text-gray-400 cursor-help" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                  <span class="tooltip-text" data-i18n-html="tooltipNotary"><strong>Notary (Notário)</strong><br>Deed signing (escritura) for purchase and mortgage, plus certidões. Includes 23% IVA. Typically €400–€800.</span>
+                </span>
+              </span>
+              <span id="outNotary" class="font-medium text-gray-800 dark:text-gray-100">—</span>
+            </div>
+          </div>
+
+          <div class="mt-5 pt-4 border-t-2 border-brand/20 dark:border-blue-400/20">
+            <div class="flex justify-between items-baseline">
+              <span class="font-semibold text-gray-700 dark:text-gray-200" data-i18n="totalUpfront">Total Upfront Capital</span>
+              <span id="outTotal" class="text-2xl font-bold text-brand dark:text-blue-400">—</span>
+            </div>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1" data-i18n="totalHint">Equity + taxes + fees</p>
+          </div>
+
+          <div class="mt-5 space-y-2" id="chartContainer">
+            <div class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2" data-i18n="breakdown">Breakdown</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="mt-10 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-lg text-sm text-amber-800 dark:text-amber-300">
+      <strong data-i18n="disclaimerTitle">Disclaimer:</strong>
+      <span data-i18n="disclaimerText"> This calculator is for estimation purposes only and does not constitute financial, tax, or legal advice. It uses 2026 IMT brackets for mainland Portugal (CIMT Art. 17, Lei 73-A/2025). Autonomous regions (Madeira/Azores) may have reduced rates set by regional decree. Includes IMT Jovem and IS Jovem benefits for urban primary residences. Always consult a qualified professional before making any purchase decisions. No data is collected — all calculations happen locally in your browser.</span>
+    </div>
+  </main>
+
+  <footer class="text-center text-xs text-gray-400 dark:text-gray-500 py-6">
+    <span data-i18n="footer">Cash for Property in Portugal — open-source, no tracking, no cookies</span>
+    <span class="mx-1">·</span>
+    <a href="https://github.com/Tomer20/cash-for-property-in-portugal" target="_blank" rel="noopener" class="inline-flex items-center gap-1 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+      <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      GitHub
+    </a>
+  </footer>
+
+  <script>
+    // ── Translations ───────────────────────────────────────────────────
+    const T = {
+      en: {
+        title: 'Cash for Property in Portugal',
+        subtitle: 'How much cash do you actually need to bring to the table?',
+        propertyDetails: 'Property Details',
+        propertyPrice: 'Property Price',
+        pricePh: '300.000',
+        bankEvaluation: 'Bank Evaluation ',
+        bankEvalHint: '(leave empty = same as price)',
+        evalPh: 'Same as price',
+        financing: 'Financing',
+        options: 'Options',
+        regionLabel: 'Region',
+        mainland: 'Mainland',
+        madeira: 'Madeira',
+        azores: 'Azores',
+        regionNote: 'Autonomous regions may have reduced IMT rates. Values shown use mainland rates as a conservative estimate.',
+        propertyType: 'Property Type',
+        urban: 'Urban',
+        rural: 'Rural',
+        otherUrban: 'Building plot',
+        propertyTypeHint: 'Apartment or house = Urban. Rural land = 5% flat IMT. Building plots = 6.5% flat.',
+        residencyStatus: 'Residency Status',
+        ptResident: 'PT Resident',
+        nonResident: 'Non-Resident',
+        residencyNote: 'Non-residents typically get max 60–70% bank financing',
+        propertyPurpose: 'Property Purpose',
+        primaryResidence: 'Primary Residence',
+        secondaryInvestment: 'Secondary / Investment',
+        under35Label: 'First-time buyer, age ≤ 35',
+        under35Hint: 'Full IMT exemption up to ~€330k, partial above',
+        translatorLabel: 'Needs translator',
+        translatorHint: "Required by law if you don't speak Portuguese",
+        fees: 'Fees',
+        lawyerFee: 'Lawyer Fee',
+        translatorFee: 'Translator Fee',
+        notaryFee: 'Notary Fee ',
+        notaryHint: '(deed signing + registration)',
+        costBreakdown: 'Cost Breakdown',
+        mortgageAmount: 'Mortgage amount',
+        equity: 'Equity (your money for property)',
+        taxesHeader: 'Taxes',
+        seloProperty: 'Selo — property',
+        seloMortgage: 'Selo — mortgage',
+        feesHeader: 'Fees',
+        lawyerLabel: 'Lawyer',
+        translatorLabelShort: 'Translator',
+        notaryLabel: 'Notary',
+        totalUpfront: 'Total Upfront Capital',
+        totalHint: 'Equity + taxes + fees',
+        breakdown: 'Breakdown',
+        disclaimerTitle: 'Disclaimer:',
+        disclaimerText: ' This calculator is for estimation purposes only and does not constitute financial, tax, or legal advice. It uses 2026 IMT brackets for mainland Portugal (CIMT Art. 17, Lei 73-A/2025). Autonomous regions (Madeira/Azores) may have reduced rates set by regional decree. Includes IMT Jovem and IS Jovem benefits for urban primary residences. Always consult a qualified professional before making any purchase decisions. No data is collected — all calculations happen locally in your browser.',
+        footer: 'Cash for Property in Portugal — open-source, no tracking, no cookies',
+        tooltipIMT: '<strong>Imposto Municipal sobre Transmissões (IMT)</strong><br>Progressive property transfer tax paid once at purchase. Rates vary by property type and purpose. First-time buyers ≤35 may be exempt up to ~€330k (urban primary only).',
+        tooltipSeloProperty: '<strong>Imposto do Selo — Property</strong><br>Stamp duty of 0.8% on the purchase price. Paid once at deed signing. Young buyers (≤35) get a discount on urban primary residence.',
+        tooltipSeloMortgage: '<strong>Imposto do Selo — Mortgage</strong><br>Stamp duty of 0.6% on the mortgage amount. Only applies with bank financing.',
+        tooltipNotary: '<strong>Notary (Notário)</strong><br>Deed signing (escritura) for purchase and mortgage, plus certidões. Includes 23% IVA. Typically €400–€800.',
+        imtFlat: 'IMT (flat {rate}%)',
+        cEquity: 'Equity', cIMT: 'IMT', cSeloProp: 'Selo (prop)', cSeloMort: 'Selo (mort)',
+        cLawyer: 'Lawyer', cNotary: 'Notary', cTranslator: 'Translator',
+      },
+      pt: {
+        title: 'Comprar em Portugal',
+        subtitle: 'Quanto capital próprio precisa para comprar casa?',
+        propertyDetails: 'Detalhes do Imóvel',
+        propertyPrice: 'Preço do Imóvel',
+        pricePh: '300.000',
+        bankEvaluation: 'Avaliação Bancária ',
+        bankEvalHint: '(deixe vazio = igual ao preço)',
+        evalPh: 'Igual ao preço',
+        financing: 'Financiamento',
+        options: 'Opções',
+        regionLabel: 'Região',
+        mainland: 'Continente',
+        madeira: 'Madeira',
+        azores: 'Açores',
+        regionNote: 'As regiões autónomas podem ter taxas de IMT reduzidas. Os valores apresentados usam as taxas do continente como estimativa conservadora.',
+        propertyType: 'Tipo de Imóvel',
+        urban: 'Urbano',
+        rural: 'Rústico',
+        otherUrban: 'Terreno',
+        propertyTypeHint: 'Apartamento ou moradia = Urbano. Terreno rústico = 5% IMT fixo. Terreno p/ construção = 6,5% fixo.',
+        residencyStatus: 'Residência',
+        ptResident: 'Residente PT',
+        nonResident: 'Não Residente',
+        residencyNote: 'Não residentes obtêm normalmente max 60–70% de financiamento',
+        propertyPurpose: 'Finalidade do Imóvel',
+        primaryResidence: 'Habitação Própria Permanente',
+        secondaryInvestment: 'Secundária / Investimento',
+        under35Label: 'Primeiro imóvel, idade ≤ 35',
+        under35Hint: 'Isenção total de IMT até ~€330k, parcial acima',
+        translatorLabel: 'Precisa de tradutor',
+        translatorHint: 'Obrigatório por lei se não falar português',
+        fees: 'Custos',
+        lawyerFee: 'Honorários Advogado',
+        translatorFee: 'Honorários Tradutor',
+        notaryFee: 'Honorários Notário ',
+        notaryHint: '(escritura + registo)',
+        costBreakdown: 'Resumo de Custos',
+        mortgageAmount: 'Valor do empréstimo',
+        equity: 'Capital próprio (para o imóvel)',
+        taxesHeader: 'Impostos',
+        seloProperty: 'Selo — imóvel',
+        seloMortgage: 'Selo — hipoteca',
+        feesHeader: 'Custos',
+        lawyerLabel: 'Advogado',
+        translatorLabelShort: 'Tradutor',
+        notaryLabel: 'Notário',
+        totalUpfront: 'Capital Total Necessário',
+        totalHint: 'Capital próprio + impostos + custos',
+        breakdown: 'Repartição',
+        disclaimerTitle: 'Aviso:',
+        disclaimerText: ' Esta calculadora destina-se apenas a fins de estimativa e não constitui aconselhamento financeiro, fiscal ou jurídico. Utiliza escalões de IMT de 2026 para Portugal continental (CIMT Art. 17, Lei 73-A/2025). As regiões autónomas (Madeira/Açores) podem ter taxas reduzidas por decreto regional. Inclui IMT Jovem e IS Jovem para habitação urbana própria permanente. Consulte sempre um profissional qualificado antes de tomar qualquer decisão de compra. Nenhum dado é recolhido — todos os cálculos são feitos localmente.',
+        footer: 'Comprar em Portugal — código aberto, sem rastreamento, sem cookies',
+        tooltipIMT: '<strong>Imposto Municipal sobre Transmissões (IMT)</strong><br>Imposto progressivo de transferência. As taxas variam conforme o tipo e finalidade. Compradores ≤35 podem ter isenção até ~€330k (urbano HPP).',
+        tooltipSeloProperty: '<strong>Imposto do Selo — Imóvel</strong><br>Imposto de selo de 0,8% sobre o preço de compra. Pago na escritura. Jovens (≤35) têm desconto em HPP urbana.',
+        tooltipSeloMortgage: '<strong>Imposto do Selo — Hipoteca</strong><br>Imposto de selo de 0,6% sobre o valor do empréstimo. Só se aplica com financiamento bancário.',
+        tooltipNotary: '<strong>Notário</strong><br>Escritura de compra e venda e hipoteca, mais certidões. Inclui 23% de IVA. Normalmente €400–€800.',
+        imtFlat: 'IMT (fixo {rate}%)',
+        cEquity: 'Capital', cIMT: 'IMT', cSeloProp: 'Selo (imóv)', cSeloMort: 'Selo (hip)',
+        cLawyer: 'Advogado', cNotary: 'Notário', cTranslator: 'Tradutor',
+      },
+    };
+
+    // ── IMT brackets (2026, continental — CIMT Art.17, Lei 73-A/2025) ─
+    const IMT_PRIMARY = [
+      { max: 106346,  rate: 0.00, deduction: 0        },
+      { max: 145470,  rate: 0.02, deduction: 2126.92  },
+      { max: 198347,  rate: 0.05, deduction: 6491.02  },
+      { max: 330539,  rate: 0.07, deduction: 10457.96 },
+      { max: 660982,  rate: 0.08, deduction: 13763.35 },
+      { max: 1150853, rate: 0.06, deduction: 0, flat: true },
+      { max: Infinity, rate: 0.075, deduction: 0, flat: true },
+    ];
+    const IMT_SECONDARY = [
+      { max: 106346,  rate: 0.01, deduction: 0        },
+      { max: 145470,  rate: 0.02, deduction: 1063.46  },
+      { max: 198347,  rate: 0.05, deduction: 5427.56  },
+      { max: 330539,  rate: 0.07, deduction: 9394.50  },
+      { max: 633931,  rate: 0.08, deduction: 12699.89 },
+      { max: 1150853, rate: 0.06, deduction: 0, flat: true },
+      { max: Infinity, rate: 0.075, deduction: 0, flat: true },
+    ];
+    const JOVEM_THRESHOLD = 330539;
+    const JOVEM_MAX = 660982;
+    const IMT_RURAL = 0.05;
+    const IMT_OTHER = 0.065;
+
+    // ── State ──────────────────────────────────────────────────────────
+    let purpose = 'primary';
+    let residency = 'resident';
+    let region = 'mainland';
+    let propertyType = 'urban';
+    let lang = navigator.language.startsWith('pt') ? 'pt' : 'en';
+    const FINANCING_MAX_RESIDENT = 90;
+    const FINANCING_MAX_NONRESIDENT = 70;
+
+    const $ = id => document.getElementById(id);
+
+    // ── i18n ───────────────────────────────────────────────────────────
+    function applyLang() {
+      const t = T[lang];
+      document.documentElement.lang = lang;
+      document.title = t.title;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const k = el.getAttribute('data-i18n');
+        if (t[k]) el.textContent = t[k];
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const k = el.getAttribute('data-i18n-html');
+        if (t[k]) el.innerHTML = t[k];
+      });
+      document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+        const k = el.getAttribute('data-i18n-ph');
+        if (t[k]) el.placeholder = t[k];
+      });
+      $('langToggle').textContent = lang === 'en' ? 'PT' : 'EN';
+      recalc();
+    }
+    function toggleLang() { lang = lang === 'en' ? 'pt' : 'en'; applyLang(); }
+
+    // ── Dark mode ──────────────────────────────────────────────────────
+    function toggleDark() { document.documentElement.classList.toggle('dark'); }
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      document.documentElement.classList.toggle('dark', e.matches);
+    });
+
+    // ── Helpers ────────────────────────────────────────────────────────
+    function parseEuro(el) {
+      const raw = el.value.replace(/[^\d]/g, '');
+      return raw === '' ? NaN : parseInt(raw, 10);
+    }
+    function formatEuro(n) {
+      if (isNaN(n) || n === 0) return '€0';
+      return '€' + n.toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    }
+    function formatInput(el) {
+      const pos = el.selectionStart;
+      const rawBefore = el.value;
+      const digits = rawBefore.replace(/[^\d]/g, '');
+      if (digits === '') { el.value = ''; return; }
+      const num = parseInt(digits, 10);
+      const formatted = num.toLocaleString('de-DE');
+      el.value = formatted;
+      const diff = formatted.length - rawBefore.length;
+      el.setSelectionRange(pos + diff, pos + diff);
+    }
+
+    // ── IMT ────────────────────────────────────────────────────────────
+    function calcIMT(value, isPrimary, isYoung, propType) {
+      if (value <= 0) return 0;
+      if (propType === 'rural') return value * IMT_RURAL;
+      if (propType === 'other') return value * IMT_OTHER;
+      // Urban
+      const brackets = isPrimary ? IMT_PRIMARY : IMT_SECONDARY;
+      if (isYoung && isPrimary) {
+        if (value <= JOVEM_THRESHOLD) return 0;
+        if (value <= JOVEM_MAX) return Math.max(0, value * 0.08 - JOVEM_THRESHOLD * 0.08);
+      }
+      return calcIMTRaw(value, brackets);
+    }
+    function calcStampProperty(value, isYoung, isPrimary, propType) {
+      if (value <= 0) return 0;
+      if (isYoung && isPrimary && propType === 'urban') {
+        if (value <= JOVEM_THRESHOLD) return 0;
+        return Math.max(0, value * 0.008 - JOVEM_THRESHOLD * 0.008);
+      }
+      return value * 0.008;
+    }
+    function calcIMTRaw(value, brackets) {
+      for (const b of brackets) {
+        if (value <= b.max) return Math.max(0, value * b.rate - b.deduction);
+      }
+      return 0;
+    }
+
+    // ── Toggle helpers ─────────────────────────────────────────────────
+    const BTN_ON = 'flex-1 py-2.5 text-sm font-medium transition-colors bg-brand text-white';
+    const BTN_OFF = 'flex-1 py-2.5 text-sm font-medium transition-colors bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600';
+
+    function setRegion(r) {
+      region = r;
+      $('btnMainland').className = r === 'mainland' ? BTN_ON : BTN_OFF;
+      $('btnMadeira').className = r === 'madeira' ? BTN_ON : BTN_OFF;
+      $('btnAzores').className = r === 'azores' ? BTN_ON : BTN_OFF;
+      $('regionNote').classList.toggle('hidden', r === 'mainland');
+      recalc();
+    }
+
+    function setPropertyType(t) {
+      propertyType = t;
+      $('btnUrban').className = t === 'urban' ? BTN_ON : BTN_OFF;
+      $('btnRural').className = t === 'rural' ? BTN_ON : BTN_OFF;
+      $('btnOther').className = t === 'other' ? BTN_ON : BTN_OFF;
+      const isUrban = t === 'urban';
+      // Purpose toggle only applies to urban
+      $('purposeWrapper').classList.toggle('opacity-40', !isUrban);
+      $('purposeWrapper').classList.toggle('pointer-events-none', !isUrban);
+      // Under 35 only for urban primary
+      if (!isUrban) {
+        $('under35').checked = false;
+        purpose = 'secondary'; // treat as non-HPP for rate selection
+        $('btnPrimary').className = BTN_OFF;
+        $('btnSecondary').className = BTN_ON;
+      }
+      updateUnder35State();
+      recalc();
+    }
+
+    function setResidency(r) {
+      residency = r;
+      const slider = $('financing');
+      $('btnResident').className = r === 'resident' ? BTN_ON : BTN_OFF;
+      $('btnNonResident').className = r !== 'resident' ? BTN_ON : BTN_OFF;
+      slider.max = r === 'resident' ? FINANCING_MAX_RESIDENT : FINANCING_MAX_NONRESIDENT;
+      if (parseInt(slider.value, 10) > slider.max) slider.value = slider.max;
+      $('residencyNote').classList.toggle('hidden', r === 'resident');
+      if (r !== 'resident') $('needsTranslator').checked = true;
+      $('financingMaxLabel').textContent = slider.max + '%';
+      recalc();
+    }
+
+    function setPurpose(p) {
+      if (propertyType !== 'urban') return;
+      purpose = p;
+      $('btnPrimary').className = p === 'primary' ? BTN_ON : BTN_OFF;
+      $('btnSecondary').className = p !== 'primary' ? BTN_ON : BTN_OFF;
+      if (p !== 'primary') $('under35').checked = false;
+      updateUnder35State();
+      recalc();
+    }
+
+    function updateUnder35State() {
+      const enabled = propertyType === 'urban' && purpose === 'primary';
+      $('under35Wrapper').classList.toggle('opacity-40', !enabled);
+      $('under35Wrapper').classList.toggle('pointer-events-none', !enabled);
+      if (!enabled) $('under35').checked = false;
+    }
+
+    // ── Chart ──────────────────────────────────────────────────────────
+    function renderChart(components) {
+      const container = $('chartContainer');
+      const header = container.querySelector('div');
+      container.innerHTML = '';
+      container.appendChild(header);
+      const total = components.reduce((s, c) => s + c.value, 0);
+      if (total <= 0) return;
+      const colors = {
+        equity: 'bg-blue-500', imt: 'bg-amber-500', stampProp: 'bg-orange-400',
+        stampMort: 'bg-orange-300', lawyer: 'bg-emerald-500', notary: 'bg-teal-500', translator: 'bg-emerald-400',
+      };
+      for (const c of components) {
+        if (c.value <= 0) continue;
+        const pct = c.value / total * 100;
+        const row = document.createElement('div');
+        row.className = 'flex items-center gap-2';
+        row.innerHTML = `
+          <span class="w-24 text-xs text-gray-500 dark:text-gray-400 text-right shrink-0">${c.label}</span>
+          <div class="flex-1 bg-gray-100 dark:bg-gray-700 rounded-full h-4 overflow-hidden">
+            <div class="${colors[c.key]} h-full rounded-full transition-all duration-300" style="width:${Math.max(pct, 1)}%"></div>
+          </div>
+          <span class="w-20 text-xs text-gray-600 dark:text-gray-400 shrink-0">${formatEuro(c.value)}</span>
+        `;
+        container.appendChild(row);
+      }
+    }
+
+    // ── Main recalc ────────────────────────────────────────────────────
+    function recalc() {
+      const t = T[lang];
+      const price = parseEuro($('price'));
+      const evalRaw = parseEuro($('evaluation'));
+      const evaluation = isNaN(evalRaw) ? price : evalRaw;
+      const financingPct = parseInt($('financing').value, 10) / 100;
+      const isYoung = $('under35').checked;
+      const needsTranslator = $('needsTranslator').checked;
+      const lawyerFee = parseEuro($('lawyer')) || 0;
+      const translatorFee = needsTranslator ? (parseEuro($('translator')) || 0) : 0;
+      const notaryFee = parseEuro($('notary')) || 0;
+
+      $('financingLabel').textContent = Math.round(financingPct * 100) + '%';
+      $('translatorRow').classList.toggle('hidden', !needsTranslator);
+      $('outTranslatorRow').classList.toggle('hidden', !needsTranslator);
+
+      // Update IMT label for flat-rate types
+      if (propertyType === 'rural') {
+        $('imtLabel').textContent = t.imtFlat.replace('{rate}', '5');
+      } else if (propertyType === 'other') {
+        $('imtLabel').textContent = t.imtFlat.replace('{rate}', '6.5');
+      } else {
+        $('imtLabel').textContent = 'IMT';
+      }
+
+      if (isNaN(price) || price <= 0) {
+        ['outMortgage','outEquity','outIMT','outStampProperty','outStampMortgage','outLawyer','outTranslator','outNotary','outTotal']
+          .forEach(id => $(id).textContent = '—');
+        renderChart([]);
+        return;
+      }
+
+      const loanBase = Math.min(price, evaluation);
+      const mortgage = Math.round(loanBase * financingPct);
+      const equity = price - mortgage;
+      const isPrimary = purpose === 'primary' && propertyType === 'urban';
+      const imt = Math.round(calcIMT(price, isPrimary, isYoung, propertyType));
+      const stampProperty = Math.round(calcStampProperty(price, isYoung, isPrimary, propertyType));
+      const stampMortgage = Math.round(mortgage * 0.006);
+      const total = equity + imt + stampProperty + stampMortgage + lawyerFee + translatorFee + notaryFee;
+
+      $('outMortgage').textContent = formatEuro(mortgage);
+      $('outEquity').textContent = formatEuro(equity);
+      $('outIMT').textContent = formatEuro(imt);
+      $('outStampProperty').textContent = formatEuro(stampProperty);
+      $('outStampMortgage').textContent = formatEuro(stampMortgage);
+      $('outLawyer').textContent = formatEuro(lawyerFee);
+      $('outTranslator').textContent = formatEuro(translatorFee);
+      $('outNotary').textContent = formatEuro(notaryFee);
+      $('outTotal').textContent = formatEuro(total);
+
+      renderChart([
+        { key: 'equity', label: t.cEquity, value: equity },
+        { key: 'imt', label: t.cIMT, value: imt },
+        { key: 'stampProp', label: t.cSeloProp, value: stampProperty },
+        { key: 'stampMort', label: t.cSeloMort, value: stampMortgage },
+        { key: 'lawyer', label: t.cLawyer, value: lawyerFee },
+        { key: 'notary', label: t.cNotary, value: notaryFee },
+        { key: 'translator', label: t.cTranslator, value: translatorFee },
+      ]);
+    }
+
+    // ── Events ─────────────────────────────────────────────────────────
+    ['price', 'evaluation', 'lawyer', 'translator', 'notary'].forEach(id => {
+      $(id).addEventListener('input', () => { formatInput($(id)); recalc(); });
+    });
+    $('financing').addEventListener('input', recalc);
+    $('under35').addEventListener('change', recalc);
+    $('needsTranslator').addEventListener('change', recalc);
+
+    // ── Init ───────────────────────────────────────────────────────────
+    applyLang();
+  </script>
+</body>
+</html>
