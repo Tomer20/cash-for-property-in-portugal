@@ -4,7 +4,7 @@ How much cash do you actually need to bring to the table when buying property in
 
 A **zero-dependency, single-page calculator** that runs entirely in your browser — no cookies, no tracking, no server calls.
 
-**[→ Live site](hhttps://cashforproperty.pt)**
+**[→ Live site](https://cashforproperty.pt)**
 
 ## What it calculates
 
