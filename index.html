@@ -103,8 +103,19 @@
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 space-y-5">
           <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100" data-i18n="propertyDetails">Property Details</h2>
 
+          <!-- Mode toggle -->
           <div>
-            <label for="price" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" data-i18n="propertyPrice">Property Price</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" data-i18n="calcMode">I want to set</label>
+            <div class="flex rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600">
+              <button id="btnModePrice" onclick="setCalcMode('price')" data-i18n="modePrice"
+                class="flex-1 py-2.5 text-sm font-medium transition-colors bg-brand text-white">Property Price</button>
+              <button id="btnModeCapital" onclick="setCalcMode('capital')" data-i18n="modeCapital"
+                class="flex-1 py-2.5 text-sm font-medium transition-colors bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600">Capital I Have</button>
+            </div>
+          </div>
+
+          <div>
+            <label for="price" id="priceLabel" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" data-i18n="propertyPrice">Property Price</label>
             <div class="relative">
               <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">€</span>
               <input id="price" type="text" inputmode="numeric" data-i18n-ph="pricePh" placeholder="300.000"
@@ -319,7 +330,15 @@
             </div>
           </div>
 
-          <div class="mt-5 pt-4 border-t-2 border-brand/20 dark:border-blue-400/20">
+          <div id="outMaxPriceRow" class="hidden mt-5 pt-4 border-t-2 border-accent/20 dark:border-accent-light/20">
+            <div class="flex justify-between items-baseline">
+              <span class="font-semibold text-gray-700 dark:text-gray-200" data-i18n="maxPropertyPrice">Max Property Price</span>
+              <span id="outMaxPrice" class="text-2xl font-bold text-accent dark:text-accent-light">—</span>
+            </div>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1" data-i18n="maxPriceHint">Maximum you can afford</p>
+          </div>
+
+          <div id="totalBlock" class="mt-5 pt-4 border-t-2 border-brand/20 dark:border-blue-400/20">
             <div class="flex justify-between items-baseline">
               <span class="font-semibold text-gray-700 dark:text-gray-200" data-i18n="totalUpfront">Total Upfront Capital</span>
               <span id="outTotal" class="text-2xl font-bold text-brand dark:text-blue-400">—</span>
@@ -412,6 +431,13 @@
         imtFlat: 'IMT (flat {rate}%)',
         cEquity: 'Equity', cIMT: 'IMT', cSeloProp: 'Selo (prop)', cSeloMort: 'Selo (mort)',
         cLawyer: 'Lawyer', cNotary: 'Notary', cTranslator: 'Translator',
+        calcMode: 'I want to set',
+        modePrice: 'Property Price',
+        modeCapital: 'Capital I Have',
+        capitalIHave: 'Capital I Have',
+        capitalPh: '100.000',
+        maxPropertyPrice: 'Max Property Price',
+        maxPriceHint: 'Maximum you can afford',
       },
       pt: {
         title: 'Comprar em Portugal',
@@ -473,6 +499,13 @@
         imtFlat: 'IMT (fixo {rate}%)',
         cEquity: 'Capital', cIMT: 'IMT', cSeloProp: 'Selo (imóv)', cSeloMort: 'Selo (hip)',
         cLawyer: 'Advogado', cNotary: 'Notário', cTranslator: 'Tradutor',
+        calcMode: 'Quero definir',
+        modePrice: 'Preço do Imóvel',
+        modeCapital: 'Capital Disponível',
+        capitalIHave: 'Capital Disponível',
+        capitalPh: '100.000',
+        maxPropertyPrice: 'Preço Máximo do Imóvel',
+        maxPriceHint: 'Máximo que pode pagar',
       },
     };
 
@@ -505,6 +538,7 @@
     let residency = 'resident';
     let region = 'mainland';
     let propertyType = 'urban';
+    let calcMode = 'price';
     let lang = navigator.language.startsWith('pt') ? 'pt' : 'en';
     const FINANCING_MAX_RESIDENT = 90;
     const FINANCING_MAX_NONRESIDENT = 70;
@@ -529,6 +563,8 @@
         if (t[k]) el.placeholder = t[k];
       });
       $('langToggle').textContent = lang === 'en' ? 'PT' : 'EN';
+      $('priceLabel').textContent = calcMode === 'price' ? t.propertyPrice : t.capitalIHave;
+      $('price').placeholder = calcMode === 'price' ? t.pricePh : t.capitalPh;
       recalc();
     }
     function toggleLang() { lang = lang === 'en' ? 'pt' : 'en'; applyLang(); }
@@ -651,6 +687,34 @@
       if (!enabled) $('under35').checked = false;
     }
 
+    function setCalcMode(mode) {
+      calcMode = mode;
+      const t = T[lang];
+      $('btnModePrice').className = mode === 'price' ? BTN_ON : BTN_OFF;
+      $('btnModeCapital').className = mode === 'capital' ? BTN_ON : BTN_OFF;
+      $('priceLabel').textContent = mode === 'price' ? t.propertyPrice : t.capitalIHave;
+      $('price').placeholder = mode === 'price' ? t.pricePh : t.capitalPh;
+      recalc();
+    }
+
+    // Reverse calculator: given capital, find max property price
+    function solvePropertyPrice(capital, financingPct, isYoung, isPrimary, propType, fees) {
+      // Binary search for the property price where total upfront = capital
+      let lo = 0, hi = capital * 10;
+      for (let i = 0; i < 100; i++) {
+        const mid = Math.floor((lo + hi) / 2);
+        const mortgage = Math.round(mid * financingPct);
+        const equity = mid - mortgage;
+        const imt = Math.round(calcIMT(mid, isPrimary, isYoung, propType));
+        const stampProp = Math.round(calcStampProperty(mid, isYoung, isPrimary, propType));
+        const stampMort = Math.round(mortgage * 0.006);
+        const totalNeeded = equity + imt + stampProp + stampMort + fees;
+        if (totalNeeded <= capital) lo = mid + 1;
+        else hi = mid - 1;
+      }
+      return hi;
+    }
+
     // ── Chart ──────────────────────────────────────────────────────────
     function renderChart(components) {
       const container = $('chartContainer');
@@ -682,19 +746,29 @@
     // ── Main recalc ────────────────────────────────────────────────────
     function recalc() {
       const t = T[lang];
-      const price = parseEuro($('price'));
+      const inputVal = parseEuro($('price'));
       const evalRaw = parseEuro($('evaluation'));
-      const evaluation = isNaN(evalRaw) ? price : evalRaw;
       const financingPct = parseInt($('financing').value, 10) / 100;
       const isYoung = $('under35').checked;
       const needsTranslator = $('needsTranslator').checked;
       const lawyerFee = parseEuro($('lawyer')) || 0;
       const translatorFee = needsTranslator ? (parseEuro($('translator')) || 0) : 0;
       const notaryFee = parseEuro($('notary')) || 0;
+      const fees = lawyerFee + translatorFee + notaryFee;
+      const isPrimary = purpose === 'primary' && propertyType === 'urban';
 
       $('financingLabel').textContent = Math.round(financingPct * 100) + '%';
       $('translatorRow').classList.toggle('hidden', !needsTranslator);
       $('outTranslatorRow').classList.toggle('hidden', !needsTranslator);
+      $('outMaxPriceRow').classList.toggle('hidden', calcMode !== 'capital');
+      // In capital mode: highlight the property price, dim the total. In price mode: vice versa.
+      if (calcMode === 'capital') {
+        $('totalBlock').className = 'mt-3 pt-3 border-t border-gray-200 dark:border-gray-700';
+        $('outTotal').className = 'text-base font-semibold text-gray-600 dark:text-gray-400';
+      } else {
+        $('totalBlock').className = 'mt-5 pt-4 border-t-2 border-brand/20 dark:border-blue-400/20';
+        $('outTotal').className = 'text-2xl font-bold text-brand dark:text-blue-400';
+      }
 
       // Update IMT label for flat-rate types
       if (propertyType === 'rural') {
@@ -705,17 +779,32 @@
         $('imtLabel').textContent = 'IMT';
       }
 
-      if (isNaN(price) || price <= 0) {
-        ['outMortgage','outEquity','outIMT','outStampProperty','outStampMortgage','outLawyer','outTranslator','outNotary','outTotal']
+      if (isNaN(inputVal) || inputVal <= 0) {
+        ['outMaxPrice','outMortgage','outEquity','outIMT','outStampProperty','outStampMortgage','outLawyer','outTranslator','outNotary','outTotal']
           .forEach(id => $(id).textContent = '—');
         renderChart([]);
         return;
       }
 
+      let price;
+      if (calcMode === 'capital') {
+        // Reverse mode: inputVal is total capital available
+        price = solvePropertyPrice(inputVal, financingPct, isYoung, isPrimary, propertyType, fees);
+        if (price <= 0) {
+          ['outMaxPrice','outMortgage','outEquity','outIMT','outStampProperty','outStampMortgage','outLawyer','outTranslator','outNotary','outTotal']
+            .forEach(id => $(id).textContent = '—');
+          renderChart([]);
+          return;
+        }
+        $('outMaxPrice').textContent = formatEuro(price);
+      } else {
+        price = inputVal;
+      }
+
+      const evaluation = isNaN(evalRaw) ? price : evalRaw;
       const loanBase = Math.min(price, evaluation);
       const mortgage = Math.round(loanBase * financingPct);
       const equity = price - mortgage;
-      const isPrimary = purpose === 'primary' && propertyType === 'urban';
       const imt = Math.round(calcIMT(price, isPrimary, isYoung, propertyType));
       const stampProperty = Math.round(calcStampProperty(price, isYoung, isPrimary, propertyType));
       const stampMortgage = Math.round(mortgage * 0.006);
